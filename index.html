@@ -825,11 +825,11 @@ button{
 
 
 <!-- MUSIC -->
-
 <audio
     id="music"
     loop
     preload="auto"
+    playsinline
 >
     <source
         src="./love-song.mp3"
@@ -939,44 +939,46 @@ const teasing=[
 /* =================================
    START EXPERIENCE
 ================================= */
+   function startExperience(){
 
-function startExperience(){
+    const entry = document.getElementById("entry");
+    const game = document.getElementById("game");
+    const music = document.getElementById("music");
+    const musicButton = document.getElementById("musicButton");
 
-    const entry =
-        document.getElementById("entry");
+    // Set music volume
+    music.volume = 0.55;
 
+    // Start music from the button click
+    music.play()
+        .then(function(){
+
+            console.log("❤️ MUSIC STARTED");
+
+            musicButton.innerHTML = "🎵 Playing";
+
+        })
+        .catch(function(error){
+
+            console.error("❌ MUSIC ERROR:", error);
+
+            musicButton.innerHTML = "🎵 Tap for music";
+
+        });
+
+    // Hide opening screen
     entry.classList.add("hide");
 
-    setTimeout(()=>{
+    // Show game
+    setTimeout(function(){
 
-        document
-            .getElementById("game")
-            .classList.add("active");
+        game.classList.add("active");
 
         loadQuestion();
 
-    },700);
+    }, 700);
 
-
-    /* Music starts from user's tap */
-
-  const music =
-    document.getElementById("music");
-
-music.volume = 0.45;
-
-music.play()
-    .then(() => {
-        document.getElementById("musicButton").innerHTML =
-            "🎵 Playing";
-    })
-    .catch((error) => {
-        console.log("Music could not start:", error);
-
-        document.getElementById("musicButton").innerHTML =
-            "🎵 Tap for music";
-    });
-}
+}   
 function toggleMusic(){
 
     const music = document.getElementById("music");
@@ -985,19 +987,30 @@ function toggleMusic(){
     if(music.paused){
 
         music.play()
-            .then(() => {
+            .then(function(){
+
                 button.innerHTML = "🎵 Playing";
+
             })
-            .catch(() => {
+            .catch(function(error){
+
+                console.error(
+                    "Music play error:",
+                    error
+                );
+
                 button.innerHTML = "🎵 Tap again";
+
             });
 
     }else{
 
         music.pause();
+
         button.innerHTML = "🔇 Music";
 
     }
+
 }
 
 /* =================================
